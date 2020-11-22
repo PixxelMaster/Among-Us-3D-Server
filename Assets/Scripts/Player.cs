@@ -79,6 +79,7 @@ public class Player : MonoBehaviour
 
         _moveDirection.y = yVelocity;
 
+        Debug.Log($"Velocity: {_moveDirection}");
         controller.Move(_moveDirection);
 
         ServerSend.PlayerPosition(this);
