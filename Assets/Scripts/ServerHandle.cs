@@ -15,6 +15,7 @@ public static void WelcomeReceived(int _fromClient, Packet _packet)
             Debug.Log($"Player \"{_username}\" (ID: {_fromClient}) has assumed the wrong client ID ({_clientIdCheck})!");
         }
         Server.clients[_fromClient].SendIntoGame(_username);
+        Server.activePlayers.Add(Server.clients[_fromClient]);
     }
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
