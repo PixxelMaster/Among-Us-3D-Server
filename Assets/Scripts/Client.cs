@@ -47,8 +47,9 @@ public class Client
 
             receivedData = new Packet();
             receiveBuffer = new byte[dataBufferSize];
-            Server.activePlayers.Add(Server.clients[id]);
+
             stream.BeginRead(receiveBuffer, 0, dataBufferSize, ReceiveCallback, null);
+
             ServerSend.Welcome(id, "Welcome to the server!");
         }
 
@@ -204,7 +205,6 @@ public class Client
         public void Disconnect()
         {
             endPoint = null;
-
         }
     }
 
@@ -240,7 +240,7 @@ public class Client
     /// <summary>Disconnects the client and stops all network traffic.</summary>
     private void Disconnect()
     {
-        Debug.Log($"{tcp.socket.Client.RemoteEndPoint} - Player {id} has disconnected.");
+        Debug.Log($"{tcp.socket.Client.RemoteEndPoint} has disconnected.");
 
         ThreadManager.ExecuteOnMainThread(() =>
         {
@@ -251,10 +251,6 @@ public class Client
         tcp.Disconnect();
         udp.Disconnect();
 
-        ServerManager.instance.isTaken[Server.clients[id].player.colourId] = false;
-        ServerSend.ColourList();
-        Server.activePlayers.Remove(Server.clients[id]);
         ServerSend.PlayerDisconnected(id);
-        Debug.Log($"{Server.activePlayers.Count} players remaining.");
     }
 }
