@@ -17,6 +17,7 @@ public static void WelcomeReceived(int _fromClient, Packet _packet)
         Server.clients[_fromClient].SendIntoGame(_username);
         Server.activePlayers.Add(Server.clients[_fromClient]);
     }
+
     public static void PlayerMovement(int _fromClient, Packet _packet)
     {
         bool[] _inputs = new bool[_packet.ReadInt()];
@@ -60,9 +61,10 @@ public static void WelcomeReceived(int _fromClient, Packet _packet)
             ServerSend.PlayerPosition(Server.clients[i].player);
             ServerSend.PlayerRotation(Server.clients[i].player);
             Server.clients[i].player.controller.enabled = true;
-
         }
+
         Debug.Log("Spawned all players to start location.");
+        ServerManager.instance.GenerateRoles();
     }
 
     public static void StartMeeting(int _fromClient, Packet _packet)

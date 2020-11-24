@@ -11,6 +11,7 @@ public enum ServerPackets
     spawnPlayer,
     playerPosition,
     playerRotation,
+    playerAnimation,
     playerDisconnected,
     playerHealth,
     playerDied,
@@ -18,7 +19,8 @@ public enum ServerPackets
     colourList,
     playerColours,
     meetingStarted,
-    meetingEnded
+    meetingEnded,
+    playerRoles
 }
 
 /// <summary>Sent from client to server.</summary>

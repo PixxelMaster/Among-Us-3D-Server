@@ -85,6 +85,7 @@ public class ServerSend
 
             SendTCPData(_toClient, _packet);
         }
+        ColourList();
     }
 
     /// <summary>Tells a client to spawn a player.</summary>
@@ -127,6 +128,17 @@ public class ServerSend
             _packet.Write(_player.transform.rotation);
 
             SendUDPDataToAll(_player.id, _packet);
+        }
+    }
+
+    public static void PlayerAnimation(Player _player, bool _isMoving)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerAnimation))
+        {
+            _packet.Write(_player.id);
+            _packet.Write(_isMoving);
+
+            SendTCPDataToAll(_player.id, _packet);
         }
     }
 
@@ -233,6 +245,16 @@ public class ServerSend
         foreach (KeyValuePair<string, int> pair in ServerManager.instance.votingResults)
         {
             Debug.Log(pair.Key + " : " + pair.Value);
+        }
+    }
+
+    public static void PlayerRoles(int _id, string _role)
+    {
+        using (Packet _packet = new Packet((int)ServerPackets.playerRoles))
+        {
+            _packet.Write(_id);
+            _packet.Write(_role);
+            SendTCPDataToAll(_packet);
         }
     }
 }

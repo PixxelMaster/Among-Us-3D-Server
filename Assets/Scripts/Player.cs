@@ -17,8 +17,14 @@ public class Player : MonoBehaviour
     public int colourId = 0;
     public bool isDead = false;
 
+    public bool isImpostor = false;
+
+    private bool lastMoveUpdate = false;
+    private bool currentMoveUpdate;
     private bool[] inputs;
     private float yVelocity = 0;
+
+    private Vector2 velocity;
 
     public bool hasVoted = false;
 
@@ -58,6 +64,7 @@ public class Player : MonoBehaviour
             _inputDirection.x += 1;
         }
 
+        velocity = _inputDirection;
         Move(_inputDirection);
     }
 
@@ -79,8 +86,27 @@ public class Player : MonoBehaviour
 
         _moveDirection.y = yVelocity;
 
-        Debug.Log($"Velocity: {_moveDirection}");
+        //Inside the Player script (Server-side)
         controller.Move(_moveDirection);
+        
+        if (velocity == Vector2.zero)
+        {
+            currentMoveUpdate = false;
+            if (lastMoveUpdate != currentMoveUpdate)
+            {
+                ServerSend.PlayerAnimation(this, false);
+                lastMoveUpdate = false;
+            }
+        }
+        else
+        {
+            currentMoveUpdate = true;
+            if (lastMoveUpdate != currentMoveUpdate)
+            {
+                ServerSend.PlayerAnimation(this, true);
+                lastMoveUpdate = true;
+            }
+        }
 
         ServerSend.PlayerPosition(this);
         ServerSend.PlayerRotation(this);
@@ -133,5 +159,10 @@ public class Player : MonoBehaviour
         controller.GetComponent<CapsuleCollider>().enabled = false;
     }
 
-
+    public void SetImpostor()
+    {
+        isImpostor = true;
+        Debug.Log($"Current player count: {Server.activePlayers.Count}");
+        Debug.Log($"Set {username} to impostor.");
+    }
 }
