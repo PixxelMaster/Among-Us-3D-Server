@@ -224,6 +224,17 @@ public class ServerSend
                 max = pair;
             }
         }
+
+        foreach (KeyValuePair<string, int> pair in ServerManager.instance.votingResults)
+        {
+            if (pair != max)
+            {
+                if (pair.Value == max.Value)
+                {
+                    max.Key = "Skip"
+                }
+            }
+        }
         Debug.Log($"Voting Result is: {max.Key}");
 
         Debug.Log("All players have voted, ending meeting.");
